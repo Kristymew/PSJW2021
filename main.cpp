@@ -51,6 +51,7 @@ int main()
 		//_delay_ms(500); //  
 		
 		zetSnelheidMotorsAchteruit(50);
+		gaVoorruit(150);
 		
 		
 		//PORTB |= (1 << PB6) | (1 << PB5 | 1 << PB2 | 1 << PB1); // zet de motors achteruit op volle kracht
