@@ -30,8 +30,7 @@ Discarded input sections
                 0x00000000       0x22 main.o
  .text.setResolutionReg
                 0x00000000       0x1c main.o
- .text.readTemp
-                0x00000000        0x6 main.o
+ .text.readReg  0x00000000       0x30 main.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
@@ -323,8 +322,9 @@ END GROUP
  .text.setRegister
                 0x00000194       0x1c main.o
                 0x00000194                setRegister
- .text.readReg  0x000001b0       0x5e main.o
-                0x000001b0                readReg
+ .text.readTemp
+                0x000001b0       0x5e main.o
+                0x000001b0                readTemp
  .text.main     0x0000020e       0x42 main.o
                 0x0000020e                main
  .text.avr-libc
@@ -364,7 +364,7 @@ END GROUP
  *(.fini0)
                 0x000002be                _etext = .
 
-.data           0x00800100       0x12 load address 0x000002be
+.data           0x00800100       0x1a load address 0x000002be
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -372,28 +372,27 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800100       0x11 main.o
-                                 0x14 (size before relaxing)
+                0x00800100       0x1a main.o
+                                 0x1d (size before relaxing)
  *(.gnu.linkonce.r*)
-                0x00800112                . = ALIGN (0x2)
- *fill*         0x00800111        0x1 
-                0x00800112                _edata = .
-                0x00800112                PROVIDE (__data_end, .)
+                0x0080011a                . = ALIGN (0x2)
+                0x0080011a                _edata = .
+                0x0080011a                PROVIDE (__data_end, .)
 
-.bss            0x00800112        0x0
+.bss            0x0080011a        0x0
                 [!provide]                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
                 [!provide]                PROVIDE (__bss_end, .)
                 0x000002be                __data_load_start = LOADADDR (.data)
-                0x000002d0                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000002d8                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800112        0x0
+.noinit         0x0080011a        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800112                _end = .
+                0x0080011a                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -472,48 +471,48 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xdfc
+.debug_info     0x00000000      0xe53
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_info    0x000005f4      0x2b9 functies.o
  .debug_info    0x000008ad      0x152 i2c.o
- .debug_info    0x000009ff      0x3fd main.o
+ .debug_info    0x000009ff      0x454 main.o
 
-.debug_abbrev   0x00000000      0x9c3
+.debug_abbrev   0x00000000      0x9ab
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x5a2 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_abbrev  0x000005a2      0x1c2 functies.o
  .debug_abbrev  0x00000764       0xb9 i2c.o
- .debug_abbrev  0x0000081d      0x1a6 main.o
+ .debug_abbrev  0x0000081d      0x18e main.o
 
-.debug_line     0x00000000      0x69e
+.debug_line     0x00000000      0x6c2
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x134 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_line    0x00000134      0x189 functies.o
  .debug_line    0x000002bd      0x17e i2c.o
- .debug_line    0x0000043b      0x263 main.o
+ .debug_line    0x0000043b      0x287 main.o
 
-.debug_frame    0x00000000      0x1a0
+.debug_frame    0x00000000      0x1ac
  *(.debug_frame)
  .debug_frame   0x00000000       0x94 functies.o
  .debug_frame   0x00000094       0x84 i2c.o
- .debug_frame   0x00000118       0x88 main.o
+ .debug_frame   0x00000118       0x94 main.o
 
-.debug_str      0x00000000      0x4f9
+.debug_str      0x00000000      0x4e8
  *(.debug_str)
  .debug_str     0x00000000      0x208 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_str     0x00000208      0x1f9 functies.o
-                                0x23f (size before relaxing)
- .debug_str     0x00000401       0x5c i2c.o
-                                0x202 (size before relaxing)
- .debug_str     0x0000045d       0x9c main.o
-                                0x2a3 (size before relaxing)
+ .debug_str     0x00000208      0x1e8 functies.o
+                                0x22e (size before relaxing)
+ .debug_str     0x000003f0       0x5c i2c.o
+                                0x1f1 (size before relaxing)
+ .debug_str     0x0000044c       0x9c main.o
+                                0x292 (size before relaxing)
 
-.debug_loc      0x00000000      0x29d
+.debug_loc      0x00000000      0x308
  *(.debug_loc)
  .debug_loc     0x00000000      0x173 functies.o
  .debug_loc     0x00000173       0x2d i2c.o
- .debug_loc     0x000001a0       0xfd main.o
+ .debug_loc     0x000001a0      0x168 main.o
 
 .debug_macinfo
  *(.debug_macinfo)

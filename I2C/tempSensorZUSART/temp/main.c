@@ -33,9 +33,9 @@ int main(void)
    
     while (1) 
     {
-      writeString("Ik ben: ");
-	  setRegister(DEVICE_ID_REG);
-	  uint16_t temp=readReg();
+      writeString("Temperatuur is : ");
+	  setRegister(TEMPERATUUR_REG);
+	  uint16_t temp=readTemp();
 	  writeUnt(temp);
 	  writeString("\n\r");
 	  _delay_ms(500);
@@ -74,13 +74,22 @@ uint16_t readReg() {
 	uint8_t x =i2cReadAck();
 	uint8_t y =i2cReadNoAck();
 	i2cStop();
+	return x*256+y;
+}
+
+uint16_t readTemp() {
+	i2cStart();
+	i2cSend((MCP9808Adres<<1)+1);   //i2c adres master read
+	uint8_t x =i2cReadAck();
+	uint8_t y =i2cReadNoAck();
+	i2cStop();
 	if ((x & 0x80) == 0x80){ //TA ³ TCRIT
 	}
 	if ((x & 0x40) == 0x40){ //TA > TUPPER
 	}
 	if ((x & 0x20) == 0x20){ //TA < TLOWER
 	}
-	x = x & 0x1F; //Clear flag bits
+		x = x & 0x1F; //Clear flag bits
 	if ((x & 0x10) == 0x10){ //TA < 0°C
 		x = x & 0x0F; //Clear SIGN
 		return 256 - (x * 16 + y / 16);
@@ -88,12 +97,6 @@ uint16_t readReg() {
 	else { //TA ³ 0°C
 		return (x * 16 + y / 16);
 	}
-	//return x*256+y;
-}
-
-uint16_t readTemp() {
-
-	return 0;
 }
 
 
