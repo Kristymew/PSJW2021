@@ -134,14 +134,14 @@ void setRegister(uint8_t r) {
 uint8_t readXL() {
 	i2cStart();
 	i2cSend((L3GD20HAdres<<1)+1);   //i2c adres master read
-	uint8_t xlg = i2cReadAck();	
+	uint8_t xlg = i2cReadNoAck();	
 	i2cStop();
 	return xlg;
 }
 uint8_t readXH() {
 	i2cStart();
 	i2cSend((L3GD20HAdres<<1)+1);   //i2c adres master read
-	uint8_t xhg = i2cReadAck();	
+	uint8_t xhg = i2cReadNoAck();	
 	i2cStop();
 	return xhg;
 }
@@ -149,28 +149,28 @@ uint8_t readXH() {
 uint8_t readYL() {
 	i2cStart();
 	i2cSend((L3GD20HAdres<<1)+1);	 //i2c adres master read
-	uint8_t ylg = i2cReadAck();
+	uint8_t ylg = i2cReadNoAck();
 	i2cStop();
 	return ylg;
 }
 uint8_t readYH() {
 	i2cStart();
 	i2cSend((L3GD20HAdres<<1)+1);   //i2c adres master read
-	uint8_t yhg = i2cReadAck();	
+	uint8_t yhg = i2cReadNoAck();	
 	i2cStop();
 	return yhg;
 }
 uint8_t readZL() {
 	i2cStart();
 	i2cSend((L3GD20HAdres<<1)+1);   //i2c adres master read
-	uint8_t zlg = i2cReadAck();
+	uint8_t zlg = i2cReadNoAck();
 	i2cStop();
 	return zlg;
 }
 uint8_t readZH() {
 	i2cStart();
 	i2cSend((L3GD20HAdres<<1)+1);   //i2c adres master read
-	uint8_t zhg = i2cReadAck();	
+	uint8_t zhg = i2cReadNoAck();	
 	i2cStop();
 	return zhg;
 }
