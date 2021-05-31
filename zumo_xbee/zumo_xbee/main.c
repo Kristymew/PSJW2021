@@ -1,10 +1,3 @@
-/* TO-DO:
-	1* Probleem is dat de waarde van inputKeyboard, de receivedChar, onthouden wordt, en als je die probeert te veranderen door
-	 * receivedByte = ' ' of 0, dan blijft die de waarde onthouden?
-	3* De functies turnLeftWide en turnRightWide werken niet.
-	4* Moet d.m.v. Timer counter Puls Width Modulation een algoritme schrijven die berekend wat de afstand is
-*/
-
 // https//www.youtube.com/watch?v=_almRz0_m9g to see splitting functions into .h and .c files
 
 #define F_CPU 16000000          				// 16MHz
@@ -18,13 +11,24 @@
 #include "motors_irq.h"
 #include "USART1_irq.h"
 
-volatile uint8_t counter = 0;					// DUMMY VAR to stimulate "sensor data"
-volatile char receivedData = ' ';     			// Create char to store input from keyboard
+void initEncoders();
 
-/*ISR(USART1_TX_vect) {							// When you send data, calls the ISR
-	counter++;
+static volatile char receivedData = ' ';     			// Create char to store input from keyboard
+//static volatile uint8_t counter = 0;
 
-	_delay_ms(1000);
+// Encoder variables
+static volatile uint16_t ticksLeft;
+static volatile uint16_t ticksRight;
+static volatile int ticksTotal;
+static volatile int distance;
+static volatile uint16_t lastLeftA;
+static volatile uint16_t lastLeftB;
+static volatile uint16_t lastRightA;
+static volatile uint16_t lastRightB;
+
+/*ISR(USART1_TX_vect) {							// Send the data of gyroscope
+	counter++;	// dummy
+	writeInt(counter);
 }*/
 
 ISR(USART1_RX_vect) {							// When you receive data, calls the ISR
@@ -32,20 +36,114 @@ ISR(USART1_RX_vect) {							// When you receive data, calls the ISR
 	direction(receivedData);					// Send the receivedData as parameter to the function direction
 }
 
+// Right
+ISR(INT6_vect) {								// Enable interrupt on PE6 for the right encoder
+	//uint8_t rightEncoderTicks;
+	//rightEncoderTicks = PINE & (1<<PORTE6);
+	
+	//if(rightEncoderTicks) {
+		//ticksRight++;
+	//}
+	
+	uint16_t newRightB = PORTF & (1<<PORTF0);				// RIGHT B
+	uint16_t newRightA = (PORTE & (1<<PORTE6)) ^ newRightB;	// RIGHT XOR		
+	
+	ticksRight += (newRightA ^ lastRightB) - (lastRightA ^ newRightB);
+	
+	lastRightA = newRightA;
+	lastRightB = newRightB;
+}
+
+// Left
+ISR(PCINT0_vect) {								// Enable interrupt on PB4 for the left encoder
+	//uint8_t leftEncoderTicks;
+	//leftEncoderTicks = PINB & (1<<PORTB4);
+	
+	//if(leftEncoderTicks) {
+		//ticksLeft++;
+	//}
+	
+	uint16_t newLeftB = PORTE & (1<<PORTE2);				// LEFT B
+	uint16_t newLeftA = (PORTB & (1<<PORTB4)) ^ newLeftB;		// RIGHT XOR	
+	
+	ticksLeft += (newLeftA ^ lastLeftB) - (lastLeftA ^ newLeftB);
+	
+	lastLeftA = newLeftA;
+	lastLeftB = newLeftB;
+}
+
 int main(void) {
 	initUsart1();								// Initialization for the registers
 	initPWM();
+	initEncoders();
+	
+	//writeChar('\f');							// Clear screen
 	
 	while(1) {
-		//writeChar('\f');						// Clear screen
-		writeString("Sensordata Temp: ");
-		writeInt(counter);						// Print the counter data every 1ms, should be done with timer
-		writeString("\n");
-		
 		writeString("Direction: ");
 		writeChar(receivedData);				// Show received input from pc
-		writeString("\n");
+		writeString("\r\n");
 		
-		_delay_ms(1000);
+		ticksTotal = (ticksLeft/2)+(ticksRight/2);
+		distance = (ticksTotal/1204)*12;		// (ticks/cpr)*(pi*diameter), pi*3.9cm = 12.2522113490 ~12
+		
+		writeString("Distance: ");
+		writeInt(distance);						// Show the distance
+		writeString("\r\n");
+
+		_delay_ms(1000);						// Show data every second
 	}
 }
+
+void initEncoders() {
+	cli();
+	// Enable interrupt on PE6 for the right encoder
+	DDRE &= ~(1<<PORTE6);						// Set PE6 as input, right encoder XORed signal
+	DDRF &= ~(1<<PORTF0);						// Set PF0 as input
+	EICRB |= (1<<ISC60) | ~(1<<ISC61);			// Sets the interrupt type
+	EIMSK |= (1<<INT6);							// Activates the interrupt
+	// Enable pin-change interrupt on PB4 for left encoder, and disable other pin-change interrupts
+	DDRB &= ~(1<<PORTB4);						// Set PB4 as input, left encoder XORed signal
+	DDRE &= ~(1<<PORTE2);						// Set PE2 as input
+	PCICR |= (1 << PCIE0);						// Set PCIE0 to enable PCMSK0 scan
+	PCMSK0 |= (1 << PCINT4);					// Set PCINT4 to trigger an interrupt on state change
+	PCIFR = (1 << PCIF0);						// Clear its interrupt flag by writing a 1.
+	sei();										// Turn on interrupts
+	
+	// If the input is high, set it to 1, if low set it to 0
+	lastLeftA =	PORTB & (1<<PORTB4);			// LEFT XOR
+	lastLeftB =	PORTE & (1<<PORTE2);			// LEFT B
+
+	lastRightA = PORTE & (1<<PORTE6);			// RIGHT XOR
+	lastRightB = PORTF & (1<<PORTF0); 			// RIGHT B
+}
+
+/*
+	 * Distance traveled = Wheel rotations * circumference = 
+	 * (encoder ticks / counts per revolution) * circumference
+	 * diameter wheel = 39mm
+	*/
+	
+	/* 
+	 * encoders provide a resolution of 12 counts per revolution of the motor shaft when counting both channels.
+	 * to compute the counts per revolution of the drive sprockets, multiply the gearboxes' gear ratio by 12.
+	 * 100:37:1 = 100.37 x 12 = 1204.44 CPR (counts per revolution)
+	*/ 
+	
+	// encoder ticks = read from left and right encoder
+	// CPR = 1204.44 ~1204
+	// circumference = pi*3.9cm = 12.2522113490 ~12
+	// Distance = (encoder ticks / 1204.44) * 12
+	
+	/*
+	 * Quadrature encoder transitions are often detected by monitoring both encoder channels directly. However, since
+	 * transitions on the Zumo’s encoders can occur at high frequencies (several thousand per second) when its motors
+	 * are running, it is necessary to use the AVR’s pin change interrupts or external interrupts to read the encoders.
+	*/
+	
+	/*
+	 * PE6		Reads the right encoder XORed signal		external interrupt INT6				Digital pin 7
+	 * PB4		Reads the left encoder XOred signal			pin change interrupt PCINT4			Digital pin 8
+	 * PF0		Reads the right encoder channel B												Digital pin 23 (analog pin 5)
+	 * PE2		Reads the left encoder channel B
+	*/
