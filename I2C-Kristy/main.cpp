@@ -147,10 +147,7 @@ int main()
 
    while(1)
    {
-        //zetGeleLedAan();
-        //_delay_ms(1250);
-        //zetGeleLedUit();
-        //_delay_ms(750);
+       
 		writeString("Positie is: ");
 		
 		setRegister(OUT_X_L);
@@ -180,6 +177,37 @@ int main()
 		writeUnt(Z);
 		writeString("\n\r");
 		_delay_ms(500);
+		
+		/*i2cStart();
+		i2cSend(L3GD20HAdresWrite);
+		i2cReadAck();
+		i2cSend(OUT_X_H);
+		i2cReadAck();
+		
+		i2cStart();
+		i2cSend(L3GD20HAdresRead);
+		i2cReadAck();
+		uint8_t XH =i2cReadNoAck();
+		i2cStop();
+		
+		i2cStart();
+		i2cSend(L3GD20HAdresWrite);
+		i2cReadAck();
+		i2cSend(OUT_X_L);
+		i2cReadAck();
+		
+		i2cStart();
+		i2cSend(L3GD20HAdresRead);
+		i2cReadAck();
+		uint8_t XL =i2cReadNoAck();
+		i2cStop();
+		
+		uint16_t X = (XH << 8 | XL);
+		
+		writeUnt(X);
+		writeString("\n\r");
+		_delay_ms(500); */
+		
 
   }
 
@@ -213,8 +241,9 @@ void setRegister(uint8_t r) {
 uint8_t readXL() {
 	i2cStart();
 	//i2cSend(L3GD20HAdresWrite);   //i2c adres master read
+	i2cSend(L3GD20HAdresRead);
 	uint8_t xl = i2cReadNoAck();	
-	i2cStop();
+	//i2cStop();
 	return xl;
 }
 uint8_t readXH() {
@@ -222,7 +251,7 @@ uint8_t readXH() {
 	//i2cSend(L3GD20HAdresWrite);   //i2c adres master read
 	i2cSend(L3GD20HAdresRead);
 	uint8_t xh = i2cReadNoAck();	
-	i2cStop();
+	//i2cStop();
 	return xh;
 }
 
@@ -231,7 +260,7 @@ uint8_t readYL() {
 	//i2cSend(L3GD20HAdresWrite);	 //i2c adres master read
 	i2cSend(L3GD20HAdresRead);
 	uint8_t yl = i2cReadNoAck();
-	i2cStop();
+	//i2cStop();
 	return yl;
 }
 uint8_t readYH() {
@@ -239,7 +268,7 @@ uint8_t readYH() {
 	//i2cSend(L3GD20HAdresWrite);   //i2c adres master read
 	i2cSend(L3GD20HAdresRead);
 	uint8_t yh = i2cReadNoAck();	
-	i2cStop();
+	//i2cStop();
 	return yh;
 }
 uint8_t readZL() {
@@ -247,7 +276,7 @@ uint8_t readZL() {
 	//i2cSend(L3GD20HAdresWrite);   //i2c adres master read
 	i2cSend(L3GD20HAdresRead);
 	uint8_t zl = i2cReadNoAck();
-	i2cStop();
+	//i2cStop();
 	return zl;
 }
 uint8_t readZH() {

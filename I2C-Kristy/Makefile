@@ -2,7 +2,7 @@ PORT=com5
 MCU=atmega32u4
 CFLAGS = -mmcu=$(MCU)   -Wall -Os
 CC = avr-gcc
-SRC= main.cpp  mrBeen.cpp  functies.cpp  i2c.cpp
+SRC= main2.cpp  mrBeen.cpp  functies.cpp  i2c.cpp
 #SRC= main.c 
 OBJ= $(SRC:.c=.o)
 TARGET = zumo
