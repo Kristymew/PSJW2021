@@ -1,3 +1,5 @@
+#define F_CPU 16000000          				// 16MHz
+
 #include <avr/io.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,24 +66,24 @@ void turnLeftWide(int speed, int speed2) {		// Right motor PWM higher than left 
 void direction(char inputKeyboard) {
 	switch(inputKeyboard) {
 		case 'w':
-			forward(400);
+			forward(200);
 			break;
 		case 's':
-			backward(400);
+			backward(200);
 			break;
 		case 'a':
-			turnLeft(400);
+			turnLeft(200);
 			turnRight(0);
 			break;
 		case 'd':
-			turnRight(400);
+			turnRight(200);
 			turnLeft(0);
 			break;
 		case 'q':
-			turnLeftWide(400, 200);
+			turnLeftWide(200, 100);
 			break;
 		case 'e':
-			turnLeftWide(200, 400);
+			turnLeftWide(100, 200);
 			break;
 		default:								// By no input, no actions
 			forward(0);
