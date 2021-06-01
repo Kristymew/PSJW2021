@@ -21,10 +21,6 @@ static volatile uint16_t ticksLeft;
 static volatile uint16_t ticksRight;
 static volatile int ticksTotal;
 static volatile int distance;
-static volatile uint16_t lastLeftA;
-static volatile uint16_t lastLeftB;
-static volatile uint16_t lastRightA;
-static volatile uint16_t lastRightB;
 
 /*ISR(USART1_TX_vect) {							// Send the data of gyroscope
 	counter++;	// dummy
@@ -38,38 +34,29 @@ ISR(USART1_RX_vect) {							// When you receive data, calls the ISR
 
 // Right
 ISR(INT6_vect) {								// Enable interrupt on PE6 for the right encoder
-	//uint8_t rightEncoderTicks;
-	//rightEncoderTicks = PINE & (1<<PORTE6);
+	uint8_t rightEncoderTicks;
+	rightEncoderTicks = PINE & (1<<PORTE6);
 	
-	//if(rightEncoderTicks) {
-		//ticksRight++;
-	//}
-	
-	uint16_t newRightB = PORTF & (1<<PORTF0);				// RIGHT B
-	uint16_t newRightA = (PORTE & (1<<PORTE6)) ^ newRightB;	// RIGHT XOR		
-	
-	ticksRight += (newRightA ^ lastRightB) - (lastRightA ^ newRightB);
-	
-	lastRightA = newRightA;
-	lastRightB = newRightB;
+	if(rightEncoderTicks) {
+		ticksRight++;
+		writeString("rightEncoderTicks: ");
+		writeInt(ticksRight);
+		writeString("\r\n");
+	}
 }
 
 // Left
 ISR(PCINT0_vect) {								// Enable interrupt on PB4 for the left encoder
-	//uint8_t leftEncoderTicks;
-	//leftEncoderTicks = PINB & (1<<PORTB4);
+	uint8_t leftEncoderTicks;
+	leftEncoderTicks = PINB & (1<<PINB4);
 	
-	//if(leftEncoderTicks) {
-		//ticksLeft++;
-	//}
-	
-	uint16_t newLeftB = PORTE & (1<<PORTE2);				// LEFT B
-	uint16_t newLeftA = (PORTB & (1<<PORTB4)) ^ newLeftB;		// RIGHT XOR	
-	
-	ticksLeft += (newLeftA ^ lastLeftB) - (lastLeftA ^ newLeftB);
-	
-	lastLeftA = newLeftA;
-	lastLeftB = newLeftB;
+	if(leftEncoderTicks) {
+		ticksLeft++;
+		writeString("leftEncoderTicks: ");
+		writeInt(ticksLeft);
+		writeString("\r\n");
+
+	}
 }
 
 int main(void) {
@@ -103,19 +90,12 @@ void initEncoders() {
 	EICRB |= (1<<ISC60) | ~(1<<ISC61);			// Sets the interrupt type
 	EIMSK |= (1<<INT6);							// Activates the interrupt
 	// Enable pin-change interrupt on PB4 for left encoder, and disable other pin-change interrupts
-	DDRB &= ~(1<<PORTB4);						// Set PB4 as input, left encoder XORed signal
+	DDRB &= ~(1<<PINB4);						// Set PB4 as input, left encoder XORed signal
 	DDRE &= ~(1<<PORTE2);						// Set PE2 as input
 	PCICR |= (1 << PCIE0);						// Set PCIE0 to enable PCMSK0 scan
 	PCMSK0 |= (1 << PCINT4);					// Set PCINT4 to trigger an interrupt on state change
 	PCIFR = (1 << PCIF0);						// Clear its interrupt flag by writing a 1.
 	sei();										// Turn on interrupts
-	
-	// If the input is high, set it to 1, if low set it to 0
-	lastLeftA =	PORTB & (1<<PORTB4);			// LEFT XOR
-	lastLeftB =	PORTE & (1<<PORTE2);			// LEFT B
-
-	lastRightA = PORTE & (1<<PORTE6);			// RIGHT XOR
-	lastRightB = PORTF & (1<<PORTF0); 			// RIGHT B
 }
 
 /*
