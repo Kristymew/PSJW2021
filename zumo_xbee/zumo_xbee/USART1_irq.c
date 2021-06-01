@@ -8,7 +8,7 @@
 
 void initUsart1() {
 	UCSR1A = 0;
-	UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << RXCIE1);	// Enables the receiver and transmitter, TX=PD1 RX=PD0, also enable RX and TX interrupts
+	UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << TXCIE1);	// Enables the receiver and transmitter, TX=PD1 RX=PD0, also enable RX and TX interrupts
 	UCSR1C = (1 << UCSZ11) | (1 << UCSZ10);		// Set data frame format: asynchronous mode, no parity, 1 stop bit, 8 bit size
 
 	/* Set the baudrate to 9600 */

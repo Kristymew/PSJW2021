@@ -22,7 +22,7 @@ void initPWM() {
 	 * PORTB6 = Left Motor PWM; Timer1 PWM output B (OC1B)
 	 * Set all ports as output
 	*/
-	DDRB |= (1 << PORTB1) | (1 << PORTB2) | (1 << PORTB5) | (1 << PORTB6);
+	DDRB |= (1<<PORTB1) | (1<<PORTB2) | (1<<PORTB5) | (1<<PORTB6);
 }
 
 /* Controlling the motors with PWM */
@@ -64,24 +64,24 @@ void turnLeftWide(int speed, int speed2) {		// Right motor PWM higher than left 
 void direction(char inputKeyboard) {
 	switch(inputKeyboard) {
 		case 'w':
-			forward(150);
+			forward(400);
 			break;
 		case 's':
-			backward(150);
+			backward(400);
 			break;
 		case 'a':
-			turnLeft(150);
+			turnLeft(400);
 			turnRight(0);
 			break;
 		case 'd':
-			turnRight(150);
+			turnRight(400);
 			turnLeft(0);
 			break;
 		case 'q':
-			turnLeftWide(150, 50);
+			turnLeftWide(400, 200);
 			break;
 		case 'e':
-			turnLeftWide(50, 150);
+			turnLeftWide(200, 400);
 			break;
 		default:								// By no input, no actions
 			forward(0);
