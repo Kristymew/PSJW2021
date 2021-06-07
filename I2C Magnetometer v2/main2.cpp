@@ -31,16 +31,15 @@ uint8_t readYH();
 uint8_t readZL();
 uint8_t readZH();
 
-int xOff;
-int zOff;
-int yOff;
+static volatile int xOff;
+static volatile int zOff;
+static volatile int yOff;
 
 int main()
 {
 
 	initUsart();
     initI2C();
-	calibratie();
 	
 	// *---------- Enable magnetometer --------*//
 	// 0x64 = 0b01100100
@@ -63,7 +62,7 @@ int main()
 	i2cSend(CTRL7); // Access register CTRL7
 	i2cSend(0x00); // Master stuurt deze waarde naar het CTRL1 register
 	i2cStop(); // Stop transmission
-	
+	calibratie();
     writeString("begin\n\r");  
 
    while(1)
@@ -164,9 +163,9 @@ uint8_t readZH() {
 }
 
 void calibratie(){
-	int xTotaal = 0;
-	int yTotaal = 0;
-	int zTotaal = 0;
+	int32_t xTotaal = 0;
+	int32_t yTotaal = 0;
+	int32_t zTotaal = 0;
 	
 	for(int i = 0; i < 1024; i++){
 	 // readGyroVars
@@ -188,7 +187,7 @@ void calibratie(){
 		uint8_t ZH = readZH();
 		uint16_t Z = (ZH << 8 | ZL);
 	 
-		_delay_ms(2000);
+		_delay_ms(2);
 		xTotaal = xTotaal + X;
 		yTotaal = yTotaal + Y;
 		zTotaal = zTotaal + Z;
