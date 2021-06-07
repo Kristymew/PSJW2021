@@ -22,6 +22,7 @@
 
 
 void setRegister(uint8_t r);
+void calibratie();
 
 uint8_t readXL();
 uint8_t readXH();
@@ -30,11 +31,16 @@ uint8_t readYH();
 uint8_t readZL();
 uint8_t readZH();
 
+int xOff;
+int zOff;
+int yOff;
+
 int main()
 {
 
 	initUsart();
     initI2C();
+	calibratie();
 	
 	// *---------- Enable magnetometer --------*//
 	// 0x64 = 0b01100100
@@ -62,6 +68,7 @@ int main()
 
    while(1)
    {
+		writeString("Test");
        
 		writeString("Richting is: ");
 		
@@ -70,6 +77,7 @@ int main()
 		setRegister(OUT_X_H_M);
 		uint8_t XH = readXH();
 		uint16_t X = (XH << 8 | XL);
+		X = X - xOff; // lees X waarde af met X - average waarde
 		
 		writeString("X: ");
 		writeUnt(X);
@@ -80,6 +88,7 @@ int main()
 		setRegister(OUT_Y_H_M);
 		uint8_t YH = readYH();
 		uint16_t Y = (YH << 8 | YL);
+		Y = Y - yOff; // lees y waarde af met y - average waarde
 		
 		writeString("Y: ");
 		writeUnt(Y);
@@ -90,6 +99,7 @@ int main()
 		setRegister(OUT_Z_H_M);
 		uint8_t ZH = readZH();
 		uint16_t Z = (ZH << 8 | ZL);
+		Z = Z - zOff; // lees z waarde af met z - average waarde
 		
 		writeString("Z: ");
 		writeUnt(Z);
@@ -151,4 +161,41 @@ uint8_t readZH() {
 	uint8_t zh = i2cReadNoAck();	
 	i2cStop();
 	return zh;
+}
+
+void calibratie(){
+	int xTotaal = 0;
+	int yTotaal = 0;
+	int zTotaal = 0;
+	
+	for(int i = 0; i < 1024; i++){
+	 // readGyroVars
+		setRegister(OUT_X_L_M);
+		uint8_t XL = readXL();
+		setRegister(OUT_X_H_M);
+		uint8_t XH = readXH();
+		uint16_t X = (XH << 8 | XL);
+				
+		setRegister(OUT_Y_L_M);
+		uint8_t YL = readYL();
+		setRegister(OUT_Y_H_M);
+		uint8_t YH = readYH();
+		uint16_t Y = (YH << 8 | YL);
+		
+		setRegister(OUT_Z_L_M);
+		uint8_t ZL = readZL();
+		setRegister(OUT_Z_H_M);
+		uint8_t ZH = readZH();
+		uint16_t Z = (ZH << 8 | ZL);
+	 
+		_delay_ms(2000);
+		xTotaal = xTotaal + X;
+		yTotaal = yTotaal + Y;
+		zTotaal = zTotaal + Z;
+	}
+	
+	xOff = xTotaal / 1024;
+	yOff = yTotaal / 1024;
+	zOff = zTotaal / 1024;
+
 }
