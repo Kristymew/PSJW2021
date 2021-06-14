@@ -41,7 +41,7 @@
       </ToolNumber>
       <ToolName xmlns="">Custom Programming Tool</ToolName>
     </custom>
-    <CustomProgrammingToolCommand>avrdude -p m32u4 -P COM4 -c avr109  -U flash:w:"\Users\kiwi\Desktop\PSJW2021-main\zumo_xbee\zumo_xbee\Debug\zumo_xbee.hex"</CustomProgrammingToolCommand>
+    <CustomProgrammingToolCommand>avrdude -p m32u4 -P COM4 -c avr109  -U flash:w:"\Users\kiwi\Desktop\PSJW2021\zumo_xbee\zumo_xbee\Debug\zumo_xbee.hex"</CustomProgrammingToolCommand>
     <AsfFrameworkConfig>
       <framework-data xmlns="">
         <options />
