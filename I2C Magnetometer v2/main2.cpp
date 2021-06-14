@@ -6,7 +6,7 @@
 #include "i2c.h"
 #include "functies.h"
 
-#define LSM303DAdresWrite	0b00111010
+#define LSM303DAdresWrite	0b00111010  //3A  1D
 #define LSM303DAdresRead	0b00111011
 
 #define WHO_AM_I     	0x0F
@@ -67,7 +67,6 @@ int main()
 
    while(1)
    {
-		writeString("Test");
        
 		writeString("Richting is: ");
 		
