@@ -143,12 +143,6 @@
     <Compile Include="i2c_irq.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="magnetoMeter_irq.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="magnetoMeter_irq.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="USART1_irq.c">
       <SubType>compile</SubType>
     </Compile>
