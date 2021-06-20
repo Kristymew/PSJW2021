@@ -110,7 +110,7 @@ void printFunction() {
 
 	setRegister(OUT_Y_L);
 	uint8_t YL = readYL();
-	setRegister(OUT_Y_H;
+	setRegister(OUT_Y_H);
 	uint8_t YH = readYH();
 	uint16_t Y = (YH << 8 | YL);
 	Y = Y - yOff;							// Lees y waarde af met y - average waarde
@@ -119,9 +119,9 @@ void printFunction() {
 	writeUnt(Y);
 	writeString(" ");
 
-	setRegister(OUT_Z_L_M);
+	setRegister(OUT_Z_L);
 	uint8_t ZL = readZL();
-	setRegister(OUT_Z_H_M);
+	setRegister(OUT_Z_H);
 	uint8_t ZH = readZH();
 	uint16_t Z = (ZH << 8 | ZL);
 	Z = Z - zOff;							// Lees z waarde af met z - average waarde

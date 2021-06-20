@@ -141,23 +141,23 @@ void calibratie() {
 	int32_t zTotaal = 0;
 
 	for(int i = 0; i < 1024; i++){
-		// readGyroVars
+		// read magnetometer average
 		setRegister(OUT_X_L_M);
-		uint8_t XL = readXL();
+		uint8_t XL = readXL_M();
 		setRegister(OUT_X_H_M);
-		uint8_t XH = readXH();
+		uint8_t XH = readXH_M();
 		uint16_t X = (XH << 8 | XL);
 
 		setRegister(OUT_Y_L_M);
-		uint8_t YL = readYL();
+		uint8_t YL = readYL_M();
 		setRegister(OUT_Y_H_M);
-		uint8_t YH = readYH();
+		uint8_t YH = readYH_M();
 		uint16_t Y = (YH << 8 | YL);
 
 		setRegister(OUT_Z_L_M);
-		uint8_t ZL = readZL();
+		uint8_t ZL = readZL_M();
 		setRegister(OUT_Z_H_M);
-		uint8_t ZH = readZH();
+		uint8_t ZH = readZH_M();
 		uint16_t Z = (ZH << 8 | ZL);
 
 		_delay_ms(2);

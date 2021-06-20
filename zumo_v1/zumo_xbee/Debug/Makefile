@@ -40,7 +40,6 @@ C_SRCS +=  \
 ../encoders_irq.c \
 ../functies_irq.c \
 ../i2c_irq.c \
-../magnetoMeter_irq.c \
 ../USART1_irq.c \
 ../main.c \
 ../motors_irq.c
@@ -56,7 +55,6 @@ OBJS +=  \
 encoders_irq.o \
 functies_irq.o \
 i2c_irq.o \
-magnetoMeter_irq.o \
 USART1_irq.o \
 main.o \
 motors_irq.o
@@ -65,7 +63,6 @@ OBJS_AS_ARGS +=  \
 encoders_irq.o \
 functies_irq.o \
 i2c_irq.o \
-magnetoMeter_irq.o \
 USART1_irq.o \
 main.o \
 motors_irq.o
@@ -74,7 +71,6 @@ C_DEPS +=  \
 encoders_irq.d \
 functies_irq.d \
 i2c_irq.d \
-magnetoMeter_irq.d \
 USART1_irq.d \
 main.d \
 motors_irq.d
@@ -83,7 +79,6 @@ C_DEPS_AS_ARGS +=  \
 encoders_irq.d \
 functies_irq.d \
 i2c_irq.d \
-magnetoMeter_irq.d \
 USART1_irq.d \
 main.d \
 motors_irq.d
@@ -117,13 +112,6 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./i2c_irq.o: .././i2c_irq.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32u4 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega32u4" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-./magnetoMeter_irq.o: .././magnetoMeter_irq.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32u4 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega32u4" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

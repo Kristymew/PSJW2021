@@ -8,8 +8,6 @@ functies_irq.c
 
 i2c_irq.c
 
-magnetoMeter_irq.c
-
 USART1_irq.c
 
 main.c
