@@ -97,34 +97,34 @@ void printFunction() {
 	/*---------- I2C ----------*/
 	writeString("Richting is: ");
 	
-	setRegister(OUT_X_L);
+	setRegister(OUT_X_L_M);
 	uint8_t XL = readXL();
-	setRegister(OUT_X_H);
+	setRegister(OUT_X_H_M);
 	uint8_t XH = readXH();
 	uint16_t X = (XH << 8 | XL);
-	X = X - xOff;							// Lees X waarde af met X - average waarde
-
+	X = X - xOff;				// lees X waarde af met X - average waarde
+	
 	writeString("X: ");
 	writeUnt(X);
 	writeString(" ");
-
-	setRegister(OUT_Y_L);
+	
+	setRegister(OUT_Y_L_M);
 	uint8_t YL = readYL();
-	setRegister(OUT_Y_H);
+	setRegister(OUT_Y_H_M);
 	uint8_t YH = readYH();
 	uint16_t Y = (YH << 8 | YL);
-	Y = Y - yOff;							// Lees y waarde af met y - average waarde
-
+	Y = Y - yOff;				// lees y waarde af met y - average waarde
+	
 	writeString("Y: ");
 	writeUnt(Y);
 	writeString(" ");
-
-	setRegister(OUT_Z_L);
+	
+	setRegister(OUT_Z_L_M);
 	uint8_t ZL = readZL();
-	setRegister(OUT_Z_H);
+	setRegister(OUT_Z_H_M);
 	uint8_t ZH = readZH();
 	uint16_t Z = (ZH << 8 | ZL);
-	Z = Z - zOff;							// Lees z waarde af met z - average waarde
+	Z = Z - zOff;				// lees z waarde af met z - average waarde
 
 	writeString("Z: ");
 	writeUnt(Z);
