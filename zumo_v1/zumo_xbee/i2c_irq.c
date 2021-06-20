@@ -50,46 +50,86 @@ void setRegister(uint8_t r) {
 	i2cSend(r);
 	i2cStop();
 }
-
-uint8_t readXL() {
+// ----------------- MAGNETOMETER ---------------------
+uint8_t readXL_M() {
 	i2cStart();
 	i2cSend(LSM303DAdresRead);
 	uint8_t xl = i2cReadNoAck();
-	//i2cStop();
+	return xl;
+}
+uint8_t readXH_M() {
+	i2cStart();
+	i2cSend(LSM303DAdresRead);
+	uint8_t xh = i2cReadNoAck();
+	return xh;
+}
+
+uint8_t readYL_M() {
+	i2cStart();
+	i2cSend(LSM303DAdresRead);
+	uint8_t yl = i2cReadNoAck();
+	return yl;
+}
+uint8_t readYH_M() {
+	i2cStart();
+	i2cSend(LSM303DAdresRead);
+	uint8_t yh = i2cReadNoAck();
+	return yh;
+}
+uint8_t readZL_M() {
+	i2cStart();
+	i2cSend(LSM303DAdresRead);
+	uint8_t zl = i2cReadNoAck();
+	return zl;
+}
+uint8_t readZH_M() {
+	i2cStart();
+	i2cSend(LSM303DAdresRead);
+	uint8_t zh = i2cReadNoAck();
+	i2cStop();
+	return zh;
+}
+
+// --------------------------------- Gyroscoop ----------------------------
+uint8_t readXL() {
+	i2cStart();
+	i2cSend(L3GD20HAdresRead);   //i2c adres master read
+	uint8_t xl = i2cReadNoAck();
+	i2cStop();
 	return xl;
 }
 uint8_t readXH() {
 	i2cStart();
-	i2cSend(LSM303DAdresRead);
+	i2cSend(L3GD20HAdresRead);   //i2c adres master read
 	uint8_t xh = i2cReadNoAck();
-	//i2cStop();
+	i2cStop();
 	return xh;
 }
 
 uint8_t readYL() {
 	i2cStart();
-	i2cSend(LSM303DAdresRead);
+	i2cSend(L3GD20HAdresRead);	 //i2c adres master read
 	uint8_t yl = i2cReadNoAck();
-	//i2cStop();
+	i2cStop();
 	return yl;
 }
 uint8_t readYH() {
 	i2cStart();
-	i2cSend(LSM303DAdresRead);
+	i2cSend(L3GD20HAdresRead);   //i2c adres master read
 	uint8_t yh = i2cReadNoAck();
-	//i2cStop();
+	i2cStop();
 	return yh;
 }
 uint8_t readZL() {
 	i2cStart();
-	i2cSend(LSM303DAdresRead);
+	i2cSend(L3GD20HAdresRead);   //i2c adres master read
 	uint8_t zl = i2cReadNoAck();
-	//i2cStop();
+	i2cStop();
 	return zl;
 }
 uint8_t readZH() {
 	i2cStart();
-	i2cSend(LSM303DAdresRead);
+	i2cSend(L3GD20HAdresRead);   //i2c adres master read
 	uint8_t zh = i2cReadNoAck();
 	i2cStop();
 	return zh;

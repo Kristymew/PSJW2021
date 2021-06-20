@@ -7,6 +7,8 @@
 
 #define LSM303DAdresWrite	0b00111010
 #define LSM303DAdresRead	0b00111011
+#define L3GD20HAdresWrite   0b11010110	
+#define L3GD20HAdresRead	0b11010111
 
 #define WHO_AM_I     	0x0F
 #define CTRL5           0x24
@@ -18,6 +20,12 @@
 #define OUT_Y_H_M       0x0B
 #define OUT_Z_L_M       0x0C
 #define OUT_Z_H_M       0x0D
+#define	OUT_X_L			0x28
+#define OUT_X_H			0x29
+#define OUT_Y_L			0x2A
+#define OUT_Y_H			0x2B
+#define OUT_Z_L			0x2C
+#define OUT_Z_H			0x2D
 
 void initI2C(void);
 void i2cWaitForComplete(void);
